@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ForecastModel } from '../models/forecast.model';
-import { getDataFromResponse } from '../../utils/get-data-from-response';
+import { getDataFromResponse } from '../../common/utils/get-data-from-response';
 import { ConfigService } from '@nestjs/config';
 import { ForecastAPIResponseModel } from '../models/forecast.api.response.model';
-import { WEATHER_API_URL_FIRST_PART, WEATHER_API_URL_SECOND_PART } from '../../constants/weathe-api.constants';
+import { WEATHER_API_URL_FIRST_PART, WEATHER_API_URL_SECOND_PART } from '../../common/constants/weathe-api.constants';
 
 @Injectable()
 export class WeatherApiService {
