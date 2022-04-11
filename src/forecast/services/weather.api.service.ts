@@ -4,6 +4,7 @@ import { ForecastModel } from '../models/forecast.model';
 import { getDataFromResponse } from '../../utils/get-data-from-response';
 import { ConfigService } from '@nestjs/config';
 import { ForecastAPIResponseModel } from '../models/forecast.api.response.model';
+import { WEATHER_API_URL_FIRST_PART, WEATHER_API_URL_SECOND_PART } from '../../constants/weathe-api.constants';
 
 @Injectable()
 export class WeatherApiService {
@@ -15,10 +16,8 @@ export class WeatherApiService {
    * @param query
    */
   async getData(query: ForecastModel): Promise<ForecastAPIResponseModel> {
-    const urlFirstPart = this.configService.get<string>('WEATHER_API_URL_FIRST_PART');
-    const urlSecondPart = this.configService.get<string>('WEATHER_API_URL_SECOND_PART');
-    const urlApiKey = this.configService.get<string>('WEATHER_API_KEY');
-    const url = `${urlFirstPart}&lat=${query.lat}&lon=${query.lon}${urlSecondPart}${urlApiKey}`;
+    const URL_API_KEY = this.configService.get<string>('WEATHER_API_KEY');
+    const url = `${WEATHER_API_URL_FIRST_PART}&lat=${query.lat}&lon=${query.lon}${WEATHER_API_URL_SECOND_PART}${URL_API_KEY}`;
 
     return await getDataFromResponse(this.httpService, url);
   }
