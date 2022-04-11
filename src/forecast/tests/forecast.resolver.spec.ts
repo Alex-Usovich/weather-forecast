@@ -1,10 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ForecastService } from './services/forecast.service';
-import { ForecastController } from './forecast.controller';
-import { ForecastModel } from './models/forecast.model';
+import { ForecastService } from '../services/forecast.service';
+import { ForecastModel } from '../models/forecast.model';
+import { ForecastResolver } from '../forecast.resolver';
+import { ForecastArgsModel } from '../models/forecast.args.model';
 
-describe('ForecastController', () => {
-  let forecastController: ForecastController;
+describe('ForecastResolver', () => {
+  let forecastResolver: ForecastResolver;
   let forecastService: ForecastService;
 
   beforeEach(async () => {
@@ -16,24 +17,24 @@ describe('ForecastController', () => {
     }
 
     const forecast: TestingModule = await Test.createTestingModule({
-      controllers: [ForecastController],
+      controllers: [ForecastResolver],
       providers: [ForecastService, ForecastServiceProvider],
     }).compile();
 
-    forecastController = forecast.get<ForecastController>(ForecastController);
+    forecastResolver = forecast.get<ForecastResolver>(ForecastResolver);
     forecastService = forecast.get<ForecastService>(ForecastService);
   });
 
   describe('forecast', () => {
 
-    it("calling getWeatherForecast method", () => {
-      const dto = new ForecastModel();
-      expect(forecastController.getWeatherForecast(dto)).not.toEqual(null);
+    it("calling forecast method", () => {
+      const dto = new ForecastArgsModel();
+      expect(forecastResolver.forecast(dto)).not.toEqual(null);
     })
 
-    it("calling getWeatherForecast method", () => {
-      const dto = new ForecastModel();
-      forecastController.getWeatherForecast(dto);
+    it("calling forecast method", () => {
+      const dto = new ForecastArgsModel();
+      forecastResolver.forecast(dto);
       expect(forecastService.getWeatherForecast).toHaveBeenCalled();
       expect(forecastService.getWeatherForecast).toHaveBeenCalledWith(dto);
     })
@@ -43,7 +44,7 @@ describe('ForecastController', () => {
       const args: ForecastModel = { lat: 33.00, lon: -94.00, date: '2022-04-07' };
       jest.spyOn(forecastService, 'getWeatherForecast').mockImplementation(async () => result);
 
-      expect(await forecastController.getWeatherForecast(args)).toBe(result);
+      expect(await forecastResolver.forecast(args)).toBe(result);
     });
   });
 });

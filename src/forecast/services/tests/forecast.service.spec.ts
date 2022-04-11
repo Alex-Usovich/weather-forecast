@@ -1,10 +1,10 @@
-import { ForecastModel } from '../models/forecast.model';
-import { ForecastService } from './forecast.service';
+import { ForecastModel } from '../../models/forecast.model';
+import { ForecastService } from '../forecast.service';
 import { Test, TestingModule } from '@nestjs/testing';
 
 class ApiServiceMock {
   getWeatherForecast(dto: ForecastModel) {
-    return { };
+    return { weatherDescription: 'some weather' };
   }
 }
 describe.only("ForecastService", () => {
@@ -29,5 +29,10 @@ describe.only("ForecastService", () => {
     const dto = new ForecastModel();
     await forecastService.getWeatherForecast(dto);
     expect(getWeatherForecastSpy).toHaveBeenCalledWith(dto);
+  });
+
+  it('should retrieve data from getWeatherForecast with some forecast params', async () => {
+    const dto = new ForecastModel();
+    expect(forecastService.getWeatherForecast(dto)).toStrictEqual({ weatherDescription: 'some weather' });
   });
 })

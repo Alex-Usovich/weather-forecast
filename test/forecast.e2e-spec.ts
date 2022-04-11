@@ -24,12 +24,13 @@ describe('Forecast Controller (e2e)', () => {
   it(`/GET forecast/daily`, () => {
     const shortDate = format(new Date(), 'yyyy-MM-dd');
     const query = `?lat=33.00&lon=-94.00&date=${shortDate}`;
+    const expectedValue = { weatherDescription: 'some' };
 
     return request(app.getHttpServer())
-      .get('/forecast/daily')
+      .get(`/forecast/daily${query}`)
       .expect(200)
       .expect(
-        forecastService.getWeatherForecast(query)
+        expectedValue
       );
   });
 

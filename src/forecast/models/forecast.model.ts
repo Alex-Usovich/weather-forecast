@@ -1,5 +1,5 @@
 import { IsDecimal, Validate } from 'class-validator';
-import { DateValidator } from '../validators/date.validator';
+import { DateValidator } from '../../validators/date.validator';
 import { ObjectType } from '@nestjs/graphql';
 
 @ObjectType()

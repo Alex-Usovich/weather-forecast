@@ -1,16 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import { lastValueFrom, map } from 'rxjs';
-import { AxiosResponse } from 'axios';
 import { ForecastModel } from '../models/forecast.model';
+import { getDataFromResponse } from '../../utils/get-data-from-response';
+import { ConfigService } from '@nestjs/config';
+import { ForecastAPIResponseModel } from '../models/forecast.api.response.model';
 
 @Injectable()
 export class WeatherApiService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(private readonly httpService: HttpService, private readonly configService: ConfigService) {}
 
-  async getData(query: ForecastModel): Promise<AxiosResponse<any>> {
-    const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${+query.lat}&lon=${+query.lon}&exclude=current,minutely,hourly,alerts&appid=3911823ddcd7a4224657c95619c0bba4`;
+  /**
+   * Query params for retrieving data
+   *
+   * @param query
+   */
+  async getData(query: ForecastModel): Promise<ForecastAPIResponseModel> {
+    const urlFirstPart = this.configService.get<string>('WEATHER_API_URL_FIRST_PART');
+    const urlSecondPart = this.configService.get<string>('WEATHER_API_URL_SECOND_PART');
+    const urlApiKey = this.configService.get<string>('WEATHER_API_KEY');
+    const url = `${urlFirstPart}&lat=${query.lat}&lon=${query.lon}${urlSecondPart}${urlApiKey}`;
 
-    return await lastValueFrom(this.httpService.get(url).pipe(map(response => response.data)));
+    return await getDataFromResponse(this.httpService, url);
   }
 }
